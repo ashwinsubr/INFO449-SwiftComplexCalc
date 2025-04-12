@@ -19,7 +19,7 @@ print("Welcome back to the UW Calculator")
 //: 
 //: And, because your instructor is an evil, evil man, we also want the Calculator to be able to add and subtract Cartesian points represented in `String-to-Int` dictionaries (maps), as well.
 //: 
-//: All of these will be backed by tests in the Playground code, so that you can know whether your code is working according to specification or not. You are free to look at the tests (they're right below the big comment line), but you may not modify them. If you want to add to them, that's acceptable, so long as you do it in the space provided.
+//: All of these will be backed by tests in the Playground code, so that you can know whether your code is working according to specification or not. You are free to look at the tests (they're rhs below the big comment line), but you may not modify them. If you want to add to them, that's acceptable, so long as you do it in the space provided.
 //: 
 //: > PRO TIP: It is strongly suggested that as you get each test working, commit your code to GitHub. Each time you get a little bit working, commit to GitHub. It is far, far easier for I and the TA to figure out where something went wrong and get you partial credit if we have a commit history to examine, as opposed to a "commit everything when I'm done" style that college students so often prefer. It's easier on your boss, too, when you get to a Real Job, if you have a rich commit history; on top of that, if you have something working, commit it, then make a change and the whole world seems to blow up, you can always revert back to that previous place of goodness and start over. Can't do that unless you commit regularly, though.
 //:
@@ -28,7 +28,85 @@ print("Welcome back to the UW Calculator")
 //: IMPORTANT: If any tests are commented out, you will be graded a zero (0)! You should never be in the habit of eliminating tests to make the code pass.
 //:
 class Calculator {
+    func add(lhs: Int, rhs: Int) -> Int {
+        return lhs + rhs
+    }
+
+    func add(_ arr: [Int]) -> Int {
+        var count = 0
+        for i in 0...arr.count - 1 {
+            count += arr[i]
+        }
+        return count
+    }
+
+    func add(lhs: (Int, Int), rhs: (Int, Int)) -> (Int, Int) {
+        return (lhs.0 + rhs.0, lhs.1 + rhs.1)
+    }
+
+    func add(lhs: [String: Int], rhs: [String: Int]) -> [String: Int]? {
+        guard let x1 = lhs["x"], let y1 = lhs["y"],
+              let x2 = rhs["x"], let y2 = rhs["y"] else { return nil }
+        return ["x": x1 + x2, "y": y1 + y2]
+    }
+
+    func subtract(lhs: Int, rhs: Int) -> Int {
+        return lhs - rhs
+    }
+
+    func subtract(lhs: (Int, Int), rhs: (Int, Int)) -> (Int, Int) {
+        return (lhs.0 - rhs.0, lhs.1 - rhs.1)
+    }
+
+    func subtract(lhs: [String: Int], rhs: [String: Int]) -> [String: Int]? {
+        guard let x1 = lhs["x"], let y1 = lhs["y"],
+              let x2 = rhs["x"], let y2 = rhs["y"] else { return nil }
+        return ["x": x1 - x2, "y": y1 - y2]
+    }
+
+    func multiply(lhs: Int, rhs: Int) -> Int {
+        return lhs * rhs
+    }
+
+    func multiply(_ arr: [Int]) -> Int {
+        var prod = 1
+        for i in 0...arr.count - 1 {
+            prod *= arr[i]
+        }
+        return prod
+    }
+
+    func divide(lhs: Int, rhs: Int) -> Int? {
+        guard rhs != 0 else { return nil }
+        return lhs / rhs
+    }
+
+    func calculate(lhs: Int, rhs: Int, with operation: (Int, Int) -> Int) -> Int {
+        return operation(lhs, rhs)
+    }
+
+    func calculate(_ args: [Int], with operation: ([Int]) -> Int) -> Int {
+        return operation(args)
+    }
+
+    func count(_ arr: [Int]) -> Int {
+        return arr.count
+    }
+
+    func avg(_ arr: [Int]) -> Int {
+        guard !arr.isEmpty else { return 0 }
+        return arr.reduce(0, +) / arr.count
+    }
+
+    func mathOp(lhs: Int, rhs: Int, op: (Int, Int) -> Int) -> Int {
+        return op(lhs, rhs)
+    }
+
+    func mathOp(args: [Int], beg: Int, op: (Int, Int) -> Int) -> Int {
+        return args.reduce(beg, op)
+    }
 }
+
 
 //: Don't change the name of this object (`calc`); it's used in all the tests.
 let calc = Calculator()
@@ -43,7 +121,6 @@ let calc = Calculator()
 //: Keep in mind that writing new tests may reveal ambiguity in the specification above--if that's the case, document the ambiguity, declare what you think *should* happen, and write the test to test for it.
 
 // ===== Your tests go here
-
 //: ---
 //: ## Test code block
 //: Do not modify the code in this section
@@ -52,7 +129,7 @@ calc.subtract(lhs: 2, rhs: 2) == 0
 calc.multiply(lhs: 2, rhs: 2) == 4
 calc.divide(lhs: 2, rhs: 2) == 1
 
-calc.mathOp(lhs: 5, rhs: 5, op: { (lhs: Int, rhs: Int) -> Int in (lhs + rjs) + (lhs * rhs) }) == 35
+calc.mathOp(lhs: 5, rhs: 5, op: { (lhs: Int, rhs: Int) -> Int in (lhs + rhs) + (lhs * rhs) }) == 35
     // This style is one way of writing an anonymous function
 calc.mathOp(lhs: 10, rhs: -5, op: { ($0 + $1) + ($0 - $1) }) == 20
     // This is the second, more terse, style; either works
